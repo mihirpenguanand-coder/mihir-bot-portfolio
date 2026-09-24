@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mihir Bot 4o | The Destroyer of Words</title>
+  <meta name="description" content="AI was going to replace writers. So, now I've become an AI. The Destroyer of Words." />
+
+  <!-- Fonts: Space Grotesk (Editorial Display) & Inter (UI Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="app-layout">
+    
+    <!-- ========================================== -->
+    <!-- LEFT SIDEBAR: PROJECTS & CHATS TREE        -->
+    <!-- ========================================== -->
+    <aside class="sidebar" id="sidebar">
+      
+      <!-- Top Action Bar -->
+      <div class="sidebar-header">
+        <button class="new-chat-btn" id="new-chat-btn" title="Start new chat / Home">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>New chat</span>
+        </button>
+
+        <button class="sidebar-toggle-btn mobile-only" id="sidebar-close-btn" aria-label="Close sidebar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+
+      <!-- Navigation Hierarchy: Introduction & Project Folders -->
+      <div class="sidebar-content" id="sidebar-content">
+        <!-- Rendered dynamically from data.js -->
+      </div>
+
+      <!-- User Identity Footer -->
+      <div class="sidebar-footer">
+        <div class="user-profile-card" id="btn-sidebar-profile">
+          <div class="user-avatar" id="sidebar-avatar">M</div>
+          <div class="user-info">
+            <span class="user-name" id="sidebar-name">Mihir Bot 4o</span>
+            <span class="user-role" id="sidebar-role">The Destroyer of Words</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Overlay backdrop for mobile drawer -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- ========================================== -->
+    <!-- MAIN WORKSPACE                             -->
+    <!-- ========================================== -->
+    <main class="main-wrapper">
+      
+      <!-- Top Navigation Bar -->
+      <header class="top-nav">
+        <div class="nav-left">
+          <button class="icon-btn" id="sidebar-open-btn" aria-label="Open sidebar" title="Toggle sidebar">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="3" x2="9" y2="21"></line>
+            </svg>
+          </button>
+          
+          <!-- Model Selector Dropdown Trigger -->
+          <div class="model-selector-wrapper" id="model-selector-wrapper">
+            <button class="model-badge" id="model-badge" type="button" aria-haspopup="true" aria-expanded="false" title="Switch Mihir Bot version / era">
+              <span class="model-name" id="current-model-name">MIHIR BOT 4o</span>
+              <span class="model-subtitle" id="current-model-subtitle">BIG FAT MARKETING</span>
+              <svg class="model-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            <!-- Dropdown Menu for Eras of Mihir Bot -->
+            <div class="model-dropdown-menu hidden" id="model-dropdown-menu" role="menu">
+              <div class="model-dropdown-header">VERSIONS / ERAS</div>
+              
+              <button class="model-dropdown-item active" type="button" data-version="4o" data-title="MIHIR BOT 4o" data-subtitle="Big Fat Marketing" data-agency-id="big-fat-marketing" role="menuitem">
+                <div class="model-option-info">
+                  <div class="model-option-title">MIHIR BOT 4o</div>
+                  <div class="model-option-desc">Big Fat Marketing</div>
+                </div>
+                <div class="model-option-check">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+              </button>
+
+              <button class="model-dropdown-item" type="button" data-version="3o" data-title="MIHIR BOT 3o" data-subtitle="Gemius" data-agency-id="gemius" role="menuitem">
+                <div class="model-option-info">
+                  <div class="model-option-title">MIHIR BOT 3o</div>
+                  <div class="model-option-desc">Gemius</div>
+                </div>
+                <div class="model-option-check">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+              </button>
+
+              <button class="model-dropdown-item" type="button" data-version="2o" data-title="MIHIR BOT 2o" data-subtitle="Harmony" data-agency-id="harmony" role="menuitem">
+                <div class="model-option-info">
+                  <div class="model-option-title">MIHIR BOT 2o</div>
+                  <div class="model-option-desc">Harmony</div>
+                </div>
+                <div class="model-option-check">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+              </button>
+
+              <button class="model-dropdown-item" type="button" data-version="1o" data-title="MIHIR BOT 1o" data-subtitle="Good old days :/" data-agency-id="legacy" role="menuitem">
+                <div class="model-option-info">
+                  <div class="model-option-title">MIHIR BOT 1o</div>
+                  <div class="model-option-desc">Good old days :/</div>
+                </div>
+                <div class="model-option-check">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-center">
+          <span class="current-chat-title" id="nav-chat-title">Home</span>
+        </div>
+
+        <div class="nav-right">
+          <button class="icon-btn" id="btn-open-intro-modal" title="Mihir Bot Origin">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+          </button>
+
+          <button class="icon-btn" id="btn-toggle-home" title="Home / Concept screen">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- ========================================== -->
+      <!-- VIEW 1: CINEMATIC OPENING TITLE CARD       -->
+      <!-- ========================================== -->
+      <section class="landing-view" id="landing-view">
+        <div class="landing-inner">
+          
+          <!-- Cinematic Typographic Hierarchy -->
+          <div class="concept-hero">
+            <div class="concept-statement-container">
+              <h1 class="hero-primary-line">AI WAS GOING TO REPLACE WRITERS.</h1>
+              <p class="hero-secondary-line">So, now I've become an AI.</p>
+              <div class="hero-payoff-line">THE DESTROYER OF WORDS.</div>
+            </div>
+
+            <!-- Interactive Prompt Cards -->
+            <div class="prompt-cards-container" id="prompt-cards-container">
+              <button class="prompt-card" data-prompt="WHAT ARE YOUR BIGGEST WEAKNESSES?">
+                <span class="prompt-card-text">WHAT ARE YOUR BIGGEST WEAKNESSES?</span>
+                <span class="prompt-card-arrow">↗</span>
+              </button>
+              <button class="prompt-card" data-prompt="HOW DID YOU GET INTO COPY/CONTENT WRITING?">
+                <span class="prompt-card-text">HOW DID YOU GET INTO COPY/CONTENT WRITING?</span>
+                <span class="prompt-card-arrow">↗</span>
+              </button>
+              <button class="prompt-card" data-prompt="WHERE DO YOU SEE YOURSELF IN 5 YEARS?">
+                <span class="prompt-card-text">WHERE DO YOU SEE YOURSELF IN 5 YEARS?</span>
+                <span class="prompt-card-arrow">↗</span>
+              </button>
+            </div>
+
+            <!-- INLINE HOME CONVERSATION THREAD (STAYS ON THE SAME PAGE) -->
+            <div class="home-chat-thread" id="home-chat-thread"></div>
+          </div>
+
+          <!-- Bottom Prompt Input Bar -->
+          <div class="landing-input-wrapper">
+            <div class="chat-input-box" id="landing-input-box">
+              <button class="tool-btn" title="Attachment">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                </svg>
+              </button>
+              
+              <input 
+                type="text" 
+                id="landing-text-input" 
+                placeholder="Ask Mihir Bot…" 
+                autocomplete="off" 
+              />
+
+              <button class="send-btn" id="landing-send-btn" aria-label="Enter chat" title="Send prompt">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="19" x2="12" y2="5"></line>
+                  <polyline points="5 12 12 5 19 12"></polyline>
+                </svg>
+              </button>
+            </div>
+            
+            <div class="input-disclaimer">
+              AI can make mistakes. <span class="disclaimer-highlight">But a combination of AI + human doesn't.</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 2: CHAT CONVERSATION VIEW             -->
+      <!-- ========================================== -->
+      <section class="chat-view hidden" id="chat-view">
+        
+        <!-- Project Sub-topic Pill Filter Bar -->
+        <div class="chat-topic-bar hidden" id="chat-topic-bar">
+          <div class="topic-bar-inner" id="topic-pills-container">
+            <!-- Rendered dynamically for multi-campaign projects -->
+          </div>
+        </div>
+
+        <!-- Messages Scroll Container -->
+        <div class="chat-scroll-area" id="chat-scroll-area">
+          <div class="messages-container" id="messages-container">
+            <!-- Messages rendered dynamically from data.js -->
+          </div>
+        </div>
+
+        <!-- Sticky Bottom Chat Input Bar -->
+        <div class="chat-bottom-bar">
+          <div class="bottom-bar-inner">
+            <div class="chat-input-box" id="chat-input-box">
+              <button class="tool-btn" title="Attach file">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                </svg>
+              </button>
+              
+              <input 
+                type="text" 
+                id="chat-text-input" 
+                placeholder="Ask Mihir Bot…" 
+                autocomplete="off" 
+              />
+
+              <button class="send-btn" id="chat-send-btn" aria-label="Send message" title="Send message">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="19" x2="12" y2="5"></line>
+                  <polyline points="5 12 12 5 19 12"></polyline>
+                </svg>
+              </button>
+            </div>
+            
+            <div class="input-disclaimer">
+              AI can make mistakes. <span class="disclaimer-highlight">But a combination of AI + human doesn't.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- CONVERSATIONAL INTRODUCTION POP-UP MODAL   -->
+  <!-- ========================================== -->
+  <div class="intro-modal-overlay" id="intro-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="intro-modal-backdrop" id="intro-modal-backdrop"></div>
+    <div class="intro-modal-window">
+      <div class="intro-modal-header">
+        <div class="intro-modal-title-group">
+          <div class="intro-status-dot"></div>
+          <span class="intro-modal-title">MIHIR BOT</span>
+          <span class="intro-badge">Origin</span>
+        </div>
+        <button class="intro-close-btn" id="intro-close-btn" aria-label="Close introduction" title="Close (Esc)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="intro-modal-body">
+        <div class="intro-portrait-container">
+          <img src="images/Introduction - mihir bot.png" alt="Mihir Bot Portrait" class="intro-portrait-img" />
+          <div class="intro-portrait-glitch-badge">MIHIR BOT 4o</div>
+        </div>
+        <div class="intro-conversation-container" id="intro-conversation-container">
+          <!-- Populated dynamically from PORTFOLIO_CONFIG.introductionModal -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- FULLSCREEN IMAGE LIGHTBOX MODAL            -->
+  <!-- ========================================== -->
+  <div class="lightbox-modal" id="image-lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
+    <div class="lightbox-content">
+      <button class="lightbox-close-btn" id="lightbox-close" aria-label="Close preview" title="Close (Esc)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div class="lightbox-image-wrapper">
+        <img src="" alt="" id="lightbox-img" />
+      </div>
+      <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
