@@ -101,15 +101,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Opening Flow:
     // 1. If deep-linked directly to a chat (#chat=...), load that conversation.
-    // 2. Otherwise on initial load, auto-open the MIHIR BOT introduction pop-up.
-    // 3. When closed, user is on the MAIN HOME / TITLE SCREEN.
+    // 2. Otherwise, show a brief intro moment before settling into the portfolio.
     const hashMatch = window.location.hash.match(/chat=([a-zA-Z0-9\-_]+)/);
     if (hashMatch && hashMatch[1]) {
       openChatView(hashMatch[1], false);
     } else if (!window.location.hash.includes("no-intro")) {
       setTimeout(() => {
-        openIntroModal();
-      }, 200);
+        openChatView(PORTFOLIO_CONFIG.defaultChatId || "ug-mothers-day", false);
+      }, 1200);
     }
   }
 
@@ -306,21 +305,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function toggleClient(clientId) {
-    if (expandedClients.has(clientId)) {
-      expandedClients.delete(clientId);
-    } else {
+    const isExpanded = expandedClients.has(clientId);
+    expandedClients.clear();
+    expandedFolders.clear();
+
+    if (!isExpanded) {
       expandedClients.add(clientId);
     }
     updateClientExpansionDOM();
   }
 
   function toggleFolder(folderId) {
-    if (expandedFolders.has(folderId)) {
-      expandedFolders.delete(folderId);
-    } else {
+    const isExpanded = expandedFolders.has(folderId);
+    expandedFolders.clear();
+    expandedClients.clear();
+
+    if (!isExpanded) {
       expandedFolders.add(folderId);
     }
-    updateFolderExpansionDOM();
+    updateClientExpansionDOM();
   }
 
   function updateClientExpansionDOM() {
@@ -345,6 +348,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function ensureClientExpandedForChat(chatId) {
+    expandedClients.clear();
+    expandedFolders.clear();
+
     SIDEBAR_STRUCTURE.forEach(agency => {
       if (agency.clients) {
         agency.clients.forEach(cl => {
@@ -446,71 +452,53 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ==========================================================================
      4. LOAD & RENDER CONVERSATION
      ========================================================================== */
-  function loadConversation(chatId) {
-    const chat = CHATS_DATA.find(c => c.id === chatId);
-    if (!chat) return;
+  function buildMediaMessageRow(msg, index) {
+    const msgType = (msg.type || msg.sender || "").toUpperCase();
+    const row = document.createElement("div");
+    row.id = `msg-${index}`;
+    row.style.animationDelay = `${Math.min(index * 0.02, 0.4)}s`;
 
-    activeChatId = chatId;
-    navChatTitle.textContent = chat.title;
-    updateSidebarActiveState();
-
-    // Clear and build messages
-    messagesContainer.innerHTML = "";
-    const conversation = chat.conversation || chat.messages || [];
-
-    // Check for sub-topics to render topic filter bar
-    const topics = [];
-    conversation.forEach((msg, idx) => {
-      if (msg.type === "TOPIC" && msg.title) {
-        topics.push({ title: msg.title, targetId: `topic-marker-${idx}` });
-      }
-    });
-
-    renderTopicBar(topics);
-
-    conversation.forEach((msg, index) => {
-      const msgType = (msg.type || msg.sender || "").toUpperCase();
-      const row = document.createElement("div");
-      row.id = `msg-${index}`;
-      row.style.animationDelay = `${Math.min(index * 0.02, 0.4)}s`;
-
-      // 0. SUB-TOPIC DIVIDER
-      if (msgType === "TOPIC") {
-        row.className = "message-row topic-divider";
-        row.id = `topic-marker-${index}`;
-        row.innerHTML = `
-          <div class="topic-badge">— ${escapeHtml(msg.title)} —</div>
-        `;
-      }
-
-      // 1. USER MESSAGE (YOU) - Dark Charcoal Chat Bubble
-      else if (msgType === "YOU" || msgType === "USER") {
-        row.className = "message-row user-message";
-        row.innerHTML = `
-          <div class="user-bubble">${formatParagraphs(msg.text)}</div>
-        `;
-      }
-      
-      // 2. CHATGPT MESSAGE (ASSISTANT / MIHIR BOT) - Clean Open Layout
-      else if (msgType === "CHATGPT" || msgType === "ASSISTANT" || msgType === "MIHIR BOT" || msgType === "BOT") {
-        row.className = "message-row assistant-message";
-        row.innerHTML = `
-          <div class="assistant-content">
-            <div class="message-text">${formatAssistantParagraphs(msg.text)}</div>
+    if (msgType === "IMAGE") {
+      const normalizedSrc = normalizePath(msg.src);
+      row.className = "message-row image-message";
+      row.innerHTML = `
+        <div class="media-message-wrapper">
+          <div class="chat-image-card" data-img-src="${normalizedSrc}" data-img-caption="${escapeHtml(msg.caption || '')}">
+            <img 
+              src="${normalizedSrc}" 
+              alt="${escapeHtml(msg.alt || 'Portfolio visual')}" 
+              class="chat-image-element"
+              loading="lazy"
+              onerror="handleImageFallback(this)"
+            />
+            <div class="image-zoom-overlay">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+              <span>Click to zoom</span>
+            </div>
+            ${msg.caption ? `<div class="image-caption-text">${escapeHtml(msg.caption)}</div>` : ''}
           </div>
-        `;
-      }
+        </div>
+      `;
+      return row;
+    }
 
-      // 3. IMAGE MESSAGE
-      else if (msgType === "IMAGE") {
+    if (msgType === "VIDEO") {
+      const normalizedSrc = normalizePath(msg.src);
+      const isImageAsset = /\.(jpe?g|png|gif|webp|avif|svg)$/i.test(normalizedSrc || "");
+
+      if (isImageAsset) {
         row.className = "message-row image-message";
-        const normalizedSrc = normalizePath(msg.src);
         row.innerHTML = `
           <div class="media-message-wrapper">
             <div class="chat-image-card" data-img-src="${normalizedSrc}" data-img-caption="${escapeHtml(msg.caption || '')}">
               <img 
                 src="${normalizedSrc}" 
-                alt="${escapeHtml(msg.alt || 'Portfolio visual')}" 
+                alt="${escapeHtml(msg.alt || msg.caption || 'Portfolio visual')}" 
                 class="chat-image-element"
                 loading="lazy"
                 onerror="handleImageFallback(this)"
@@ -528,28 +516,101 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           </div>
         `;
+        return row;
       }
 
-      // 4. VIDEO MESSAGE
-      else if (msgType === "VIDEO") {
-        row.className = "message-row video-message";
-        const normalizedSrc = normalizePath(msg.src);
+      row.className = "message-row video-message";
+      row.innerHTML = `
+        <div class="media-message-wrapper">
+          <div class="chat-video-card">
+            <video controls playsinline preload="metadata" class="chat-video-element" data-orientation="auto">
+              <source src="${normalizedSrc}" type="video/mp4">
+              Your browser does not support video playback.
+            </video>
+            ${msg.caption ? `<div class="image-caption-text">${escapeHtml(msg.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+
+      const video = row.querySelector("video");
+      if (video) {
+        video.addEventListener("loadedmetadata", () => {
+          const card = video.closest(".chat-video-card");
+          if (!card) return;
+          const isPortrait = video.videoHeight > video.videoWidth;
+          card.classList.toggle("portrait-video", isPortrait);
+          card.classList.toggle("landscape-video", !isPortrait);
+          video.dataset.orientation = isPortrait ? "portrait" : "landscape";
+        });
+      }
+
+      return row;
+    }
+
+    return row;
+  }
+
+  function loadConversation(chatId) {
+    const chat = CHATS_DATA.find(c => c.id === chatId);
+    if (!chat) return;
+
+    activeChatId = chatId;
+    navChatTitle.textContent = chat.title;
+    updateSidebarActiveState();
+
+    messagesContainer.innerHTML = "";
+    const conversation = chat.conversation || chat.messages || [];
+
+    const topics = [];
+    conversation.forEach((msg, idx) => {
+      if (msg.type === "TOPIC" && msg.title) {
+        topics.push({ title: msg.title, targetId: `topic-marker-${idx}` });
+      }
+    });
+
+    renderTopicBar(topics);
+
+    let mediaBuffer = [];
+    const flushMediaBuffer = () => {
+      if (!mediaBuffer.length) return;
+
+      const galleryRow = document.createElement("div");
+      galleryRow.className = "message-row media-gallery-row";
+      const gallery = document.createElement("div");
+      gallery.className = "media-gallery";
+
+      mediaBuffer.forEach(item => gallery.appendChild(item));
+      galleryRow.appendChild(gallery);
+      messagesContainer.appendChild(galleryRow);
+      mediaBuffer = [];
+    };
+
+    const renderGroupedMessage = (group, index) => {
+      const row = document.createElement("div");
+      row.id = `msg-${index}`;
+      row.style.animationDelay = `${Math.min(index * 0.02, 0.4)}s`;
+
+      if (group.type === "USER") {
+        row.className = "message-row user-message";
+        const mergedText = group.items.map(item => String(item.text || "")).filter(Boolean).join("\n\n");
+        row.innerHTML = `<div class="user-bubble">${formatParagraphs(mergedText)}</div>`;
+      } else if (group.type === "ASSISTANT") {
+        row.className = "message-row assistant-message";
+        const mergedText = group.items.map(item => String(item.text || "")).filter(Boolean).join("\n\n");
         row.innerHTML = `
-          <div class="media-message-wrapper">
-            <div class="chat-video-card">
-              <video controls playsinline preload="metadata" class="chat-video-element">
-                <source src="${normalizedSrc}" type="video/mp4">
-                Your browser does not support video playback.
-              </video>
-              ${msg.caption ? `<div class="image-caption-text">${escapeHtml(msg.caption)}</div>` : ''}
-            </div>
+          <div class="assistant-content">
+            <div class="message-text">${formatAssistantParagraphs(mergedText)}</div>
           </div>
         `;
-      }
-
-      // 5. FILE ATTACHMENT MESSAGE
-      else if (msgType === "FILE") {
+      } else if (group.type === "TOPIC") {
+        row.className = "message-row topic-divider";
+        row.id = `topic-marker-${index}`;
+        row.innerHTML = `
+          <div class="topic-badge">— ${escapeHtml(group.item.title)} —</div>
+        `;
+      } else if (group.type === "FILE") {
         row.className = "message-row file-message";
+        const msg = group.item;
         const normalizedSrc = normalizePath(msg.src || msg.url || "#");
         row.innerHTML = `
           <div class="media-message-wrapper">
@@ -571,12 +632,64 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       messagesContainer.appendChild(row);
+    };
+
+    let activeGroup = null;
+    const flushActiveGroup = () => {
+      if (!activeGroup) return;
+      renderGroupedMessage(activeGroup, activeGroup.index);
+      activeGroup = null;
+    };
+
+    conversation.forEach((msg, index) => {
+      const msgType = (msg.type || msg.sender || "").toUpperCase();
+      const isMedia = msgType === "IMAGE" || msgType === "VIDEO";
+
+      if (isMedia) {
+        flushActiveGroup();
+        const mediaRow = buildMediaMessageRow(msg, index);
+        messagesContainer.appendChild(mediaRow);
+        return;
+      }
+
+      if (msgType === "TOPIC") {
+        flushActiveGroup();
+        renderGroupedMessage({ type: "TOPIC", item: msg, index }, index);
+        return;
+      }
+
+      if (msgType === "FILE") {
+        flushActiveGroup();
+        renderGroupedMessage({ type: "FILE", item: msg, index }, index);
+        return;
+      }
+
+      const logicalType = (msgType === "YOU" || msgType === "USER") ? "USER" : (msgType === "CHATGPT" || msgType === "ASSISTANT" || msgType === "MIHIR BOT" || msgType === "BOT") ? "ASSISTANT" : null;
+
+      if (!logicalType) {
+        flushActiveGroup();
+        const row = document.createElement("div");
+        row.id = `msg-${index}`;
+        row.style.animationDelay = `${Math.min(index * 0.02, 0.4)}s`;
+        row.className = "message-row";
+        row.innerHTML = `<div class="message-text">${escapeHtml(msg.text || "")}</div>`;
+        messagesContainer.appendChild(row);
+        return;
+      }
+
+      if (!activeGroup || activeGroup.type !== logicalType) {
+        flushActiveGroup();
+        activeGroup = { type: logicalType, items: [msg], index };
+      } else {
+        activeGroup.items.push(msg);
+      }
     });
 
-    // Reset scroll smoothly to top
-    chatScrollArea.scrollTop = 0;
+    flushActiveGroup();
 
-    // Attach media click listeners
+    flushMediaBuffer();
+
+    chatScrollArea.scrollTop = 0;
     attachMediaListeners();
   }
 
@@ -697,6 +810,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modelDropdown = document.getElementById("model-dropdown-menu");
     const currentModelName = document.getElementById("current-model-name");
     const currentModelSubtitle = document.getElementById("current-model-subtitle");
+    const versionNote = document.getElementById("version-note");
 
     if (!modelBadge || !modelDropdown) return;
 
@@ -722,30 +836,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const items = modelDropdown.querySelectorAll(".model-dropdown-item");
     items.forEach(item => {
-      item.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const title = item.getAttribute("data-title") || "MIHIR BOT 4o";
-        const subtitle = item.getAttribute("data-subtitle") || "Big Fat Marketing";
-        const agencyId = item.getAttribute("data-agency-id");
-
-        // Update active check in menu
-        items.forEach(i => i.classList.remove("active"));
-        item.classList.add("active");
-
-        // Update badge labels
-        if (currentModelName) currentModelName.textContent = title;
-        if (currentModelSubtitle) currentModelSubtitle.textContent = subtitle.toUpperCase();
-
-        closeDropdown();
-
-        // Scroll to agency in sidebar if present
-        if (agencyId) {
-          const agencyElem = sidebarContent.querySelector(`[data-agency-id="${agencyId}"]`);
-          if (agencyElem) {
-            agencyElem.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
-        }
-      });
+      item.setAttribute("aria-disabled", "true");
+      item.style.pointerEvents = "none";
+      item.style.cursor = "default";
     });
 
     // Close when clicking outside
@@ -821,11 +914,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     btnToggleHome.addEventListener("click", () => {
-      if (currentView === "landing") {
-        openChatView(activeChatId);
-      } else {
-        openLandingView();
-      }
+      openLandingView();
     });
 
     if (btnOpenIntroModal) {
@@ -861,6 +950,72 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function normalizePromptText(promptText) {
+    return String(promptText || "")
+      .replace(/\u2019|\u2018/g, "'")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toUpperCase();
+  }
+
+  function buildPromptReplyMarkup(promptText) {
+    const normalized = normalizePromptText(promptText);
+    const compact = normalized.replace(/[^A-Z0-9\s]/g, "").replace(/\s+/g, " ").trim();
+
+    if (normalized === "HOME" || normalized === "TAKE ME HOME") {
+      return `
+        <div class="assistant-content">
+          <div class="message-text">
+            <p class="chat-p response-emphasis-first">Home is where the Wi‑Fi is weak, the jokes are stronger, and the portfolio still insists on being memorable.</p>
+            <p class="chat-p">This is the part where the bot tries to act casual.</p>
+            <p class="chat-p response-emphasis-final">And somehow, it still ends up being the weirdest part of the whole website.</p>
+            <div class="think-outside-bot">THINK OUTSIDE THE BOT</div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (compact === "CLICK ON THE SIDEBAR TO VIEW MY WORK") {
+      return `
+        <div class="assistant-content">
+          <div class="message-text">
+            <p class="chat-p response-emphasis-first">I told you to click on the sidebar 😡😡😡</p>
+          </div>
+        </div>
+      `;
+    }
+
+    if (compact === "I COULDNT AFFORD ACTUAL AI INTEGRATION SO DONT EXPECT ANY ANSWERS FROM THE CHATBOT") {
+      return `
+        <div class="assistant-content">
+          <div class="message-text">
+            <p class="chat-p response-emphasis-first">This is not an actual ai, this is just the most creative 😉 way to show off my portfolio</p>
+          </div>
+        </div>
+      `;
+    }
+
+    if (compact === "IF YOU STILL WISH TO ASK ANY QUESTIONS GIVE IT A TRY") {
+      return `
+        <div class="assistant-content">
+          <div class="message-text">
+            <p class="chat-p response-emphasis-first">think outside the bot</p>
+            <p class="chat-p call-human-message">Call the original human.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="assistant-content">
+        <div class="message-text">
+          <p class="chat-p response-emphasis-first">think outside the bot</p>
+          <p class="chat-p call-human-message">Call the original human.</p>
+        </div>
+      </div>
+    `;
+  }
+
   // Handle prompt submit on Landing Page (STAYS ON THE SAME PAGE)
   function handleLandingPromptSubmit(promptText) {
     if (!promptText) return;
@@ -869,10 +1024,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const homeThread = document.getElementById("home-chat-thread");
     if (!homeThread) return;
 
+    const normalizedText = String(promptText).trim();
+
     // 1. Append user prompt bubble
     const userRow = document.createElement("div");
     userRow.className = "home-msg-row user-message";
-    userRow.innerHTML = `<div class="user-bubble">${formatParagraphs(promptText)}</div>`;
+    userRow.innerHTML = `<div class="user-bubble">${formatParagraphs(normalizedText)}</div>`;
     homeThread.appendChild(userRow);
 
     // Scroll smoothly within landing view
@@ -880,19 +1037,11 @@ document.addEventListener("DOMContentLoaded", () => {
       userRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }, 40);
 
-    // 2. Append natural Mihir Bot fallback response
+    // 2. Append Mihir Bot response
     setTimeout(() => {
       const assistantRow = document.createElement("div");
       assistantRow.className = "home-msg-row assistant-message";
-      assistantRow.innerHTML = `
-        <div class="assistant-content">
-          <div class="message-text">
-            <p class="chat-p response-emphasis-first">I'm sorry.</p>
-            <p class="chat-p">You've reached the free version of Mihir Bot.</p>
-            <p class="chat-p response-emphasis-final">For this kind of work, you should probably hire a professional.</p>
-          </div>
-        </div>
-      `;
+      assistantRow.innerHTML = buildPromptReplyMarkup(normalizedText);
       homeThread.appendChild(assistantRow);
       setTimeout(() => {
         assistantRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -917,20 +1066,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Scroll to bottom
     chatScrollArea.scrollTo({ top: chatScrollArea.scrollHeight, behavior: "smooth" });
 
-    // 2. Append natural Mihir Bot response
+    // 2. Append Mihir Bot response
     setTimeout(() => {
       const assistantRow = document.createElement("div");
       assistantRow.className = "message-row assistant-message";
-
-      assistantRow.innerHTML = `
-        <div class="assistant-content">
-          <div class="message-text">
-            <p class="chat-p response-emphasis-first">I'm sorry.</p>
-            <p class="chat-p">You've reached the free version of Mihir Bot.</p>
-            <p class="chat-p response-emphasis-final">For this kind of work, you should probably hire a professional.</p>
-          </div>
-        </div>
-      `;
+      assistantRow.innerHTML = buildPromptReplyMarkup(userPrompt);
 
       messagesContainer.appendChild(assistantRow);
       chatScrollArea.scrollTo({ top: chatScrollArea.scrollHeight, behavior: "smooth" });
@@ -978,18 +1118,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function formatParagraphs(text) {
     if (!text) return "";
-    const paragraphs = text.split(/\n\n+/);
-    return paragraphs
-      .map(p => `<p class="chat-p">${escapeHtml(p.trim()).replace(/\n/g, '<br>')}</p>`)
-      .join('');
+    const cleanText = String(text).trim().replace(/\r\n/g, "\n");
+    return `<p class="chat-p">${escapeHtml(cleanText).replace(/\n/g, '<br>')}</p>`;
   }
 
   function formatAssistantParagraphs(text) {
     if (!text) return "";
-    const paragraphs = text.split(/\n\n+/);
-    return paragraphs
-      .map(p => {
-        const trimmed = p.trim();
+
+    const normalized = String(text).trim().replace(/\r\n/g, "\n");
+    const segments = normalized.split(/\n+/).map(segment => segment.trim()).filter(Boolean);
+
+    return segments
+      .map(segment => {
+        const trimmed = segment.trim();
         const upper = trimmed.toUpperCase();
 
         // Check for campaign thought headline
@@ -1016,11 +1157,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function normalizePath(path) {
     if (!path) return "";
-    let cleanPath = path;
-    if (cleanPath.startsWith("/") && !cleanPath.startsWith("//")) {
-      cleanPath = cleanPath.slice(1);
+
+    let cleanPath = String(path).trim().replace(/\\/g, "/");
+
+    if (cleanPath.startsWith("http://") || cleanPath.startsWith("https://") || cleanPath.startsWith("data:") || cleanPath.startsWith("#")) {
+      return cleanPath;
     }
-    return cleanPath;
+
+    cleanPath = cleanPath.replace(/^\.\//, "");
+    cleanPath = cleanPath.replace(/^\/+/, "");
+    cleanPath = cleanPath.split("/").map(segment => encodeURI(segment)).join("/");
+
+    return `/${cleanPath}`;
   }
 
   // Fallback handler if JPG not found

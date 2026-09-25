@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Mihir Bot favicon">
+  <defs>
+    <linearGradient id="g" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#f8d7d7"/>
+      <stop offset="40%" stop-color="#f9a8a8"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="22" fill="#0b0d12"/>
+  <path d="M35 96V32h18l20 28 20-28h18v64H93V61L74 89H54L35 61v35H35z" fill="url(#g)"/>
+</svg>

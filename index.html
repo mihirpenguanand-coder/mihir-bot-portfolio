@@ -13,6 +13,7 @@
 
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 </head>
 <body>
 
@@ -86,6 +87,8 @@
                 <polyline points="6 9 12 15 18 9"></polyline>
               </svg>
             </button>
+
+            <div class="version-note" id="version-note" aria-live="polite">Previous versions cannot be reset to, but the bot can be upgraded with a new job.</div>
 
             <!-- Dropdown Menu for Eras of Mihir Bot -->
             <div class="model-dropdown-menu hidden" id="model-dropdown-menu" role="menu">
@@ -180,16 +183,16 @@
 
             <!-- Interactive Prompt Cards -->
             <div class="prompt-cards-container" id="prompt-cards-container">
-              <button class="prompt-card" data-prompt="WHAT ARE YOUR BIGGEST WEAKNESSES?">
-                <span class="prompt-card-text">WHAT ARE YOUR BIGGEST WEAKNESSES?</span>
+              <button class="prompt-card" data-prompt="Click on the sidebar to view my work">
+                <span class="prompt-card-text">Click on the sidebar to view my work</span>
                 <span class="prompt-card-arrow">↗</span>
               </button>
-              <button class="prompt-card" data-prompt="HOW DID YOU GET INTO COPY/CONTENT WRITING?">
-                <span class="prompt-card-text">HOW DID YOU GET INTO COPY/CONTENT WRITING?</span>
+              <button class="prompt-card" data-prompt="I couldn’t afford actual AI integration, so don’t expect any answers from the chatbot">
+                <span class="prompt-card-text">I couldn’t afford actual AI integration, so don’t expect any answers from the chatbot</span>
                 <span class="prompt-card-arrow">↗</span>
               </button>
-              <button class="prompt-card" data-prompt="WHERE DO YOU SEE YOURSELF IN 5 YEARS?">
-                <span class="prompt-card-text">WHERE DO YOU SEE YOURSELF IN 5 YEARS?</span>
+              <button class="prompt-card" data-prompt="If you still wish to ask any questions, give it a try">
+                <span class="prompt-card-text">If you still wish to ask any questions, give it a try</span>
                 <span class="prompt-card-arrow">↗</span>
               </button>
             </div>
@@ -336,7 +339,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="data.js"></script>
+  <script src="data_new.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

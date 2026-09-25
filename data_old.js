@@ -20,7 +20,7 @@ const PORTFOLIO_CONFIG = {
     "promptCards":  [
                         "WHAT ARE YOUR BIGGEST WEAKNESSES?",
                         "HOW DID YOU GET INTO COPY/CONTENT WRITING?",
-                        "WHERE DO YOU SEE YOURSELF IN 5 YEARS?"
+                        "SALARY KITNA LOGEY?"
                     ],
     "disclaimer":  {
                        "highlight":  "But a combination of AI + human doesn\u0027t.",
@@ -153,11 +153,7 @@ const SIDEBAR_STRUCTURE = [
                                           },
                                           {
                                               "id":  "ug-1000-days",
-                                              "title":  "1000 Days"
-                                          },
-                                          {
-                                              "id":  "ug-1-million-brownies",
-                                              "title":  "1 Million Brownies"
+                                              "title":  "1000 Days / 1 Million Brownies"
                                           },
                                           {
                                               "id":  "ug-ahmedabad",
@@ -251,7 +247,7 @@ const SIDEBAR_STRUCTURE = [
                                           },
                                           {
                                               "id":  "ssc-tray-hiring",
-                                              "title":  "Tray Paper \u0026 Hiring"
+                                              "title":  "Tray Paper & Hiring"
                                           },
                                           {
                                               "id":  "ssc-challan",
@@ -259,7 +255,7 @@ const SIDEBAR_STRUCTURE = [
                                           },
                                           {
                                               "id":  "ssc-valentines",
-                                              "title":  "Valentine\u0027s Day"
+                                              "title":  "Valentine's Day"
                                           },
                                           {
                                               "id":  "ssc-fevicol",
@@ -273,7 +269,7 @@ const SIDEBAR_STRUCTURE = [
                             "chats":  [
                                           {
                                               "id":  "techowl-stay-owlert",
-                                              "title":  "Stay Owlert \u0026 Way Forward"
+                                              "title":  "Stay Owlert & Way Forward"
                                           },
                                           {
                                               "id":  "techowl-cydes",
@@ -710,7 +706,7 @@ const CHATS_DATA = [
                              {
                                  "caption":  "PODI - Ahmedabad Launch - Podi - Ahm",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Podi - Ahm.mp4"
+                                 "src":  "videos/Podi - Ahm.mp4"
                              },
                              {
                                  "text":  "That was a killer ad film with an amazing response. I think we definitely fulfilled our mission! Moving on, Podi is now getting listed on Swiggy \u0026 Zomato and wants to replicate that response. They’ve asked us to come up with another film. What do you think we can do?",
@@ -723,7 +719,7 @@ const CHATS_DATA = [
                              {
                                  "caption":  "PODI - Ahmedabad Launch - Podi - Zomato \u0026 Swiggy",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Podi - Zomato \u0026 Swiggy.mp4"
+                                 "src":  "videos/Podi - Zomato \u0026 Swiggy.mp4"
                              }
                          ],
         "id":  "podi-ahmedabad",
@@ -758,27 +754,27 @@ const CHATS_DATA = [
                              {
                                  "caption":  "PODI - Jamnagar Launch - JAMNAGAR - 1",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/JAMNAGAR - 1.mp4"
+                                 "src":  "videos/JAMNAGAR - 1.mp4"
                              },
                              {
                                  "caption":  "PODI - Jamnagar Launch - Jamnagar - 2",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Jamnagar - 2.mp4"
+                                 "src":  "videos/Jamnagar - 2.mp4"
                              },
                              {
                                  "caption":  "PODI - Jamnagar Launch - Jamnagar - 3",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Jamnagar - 3.mp4"
+                                 "src":  "videos/Jamnagar - 3.mp4"
                              },
                              {
                                  "caption":  "PODI - Jamnagar Launch - Jamnagar - 4",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Jamnagar - 4.mp4"
+                                 "src":  "videos/Jamnagar - 4.mp4"
                              },
                              {
                                  "caption":  "PODI - Jamnagar Launch - Jamnagar - 5",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Jamnagar - 5.mp4"
+                                 "src":  "videos/Jamnagar - 5.mp4"
                              },
                              {
                                  "text":  "Good, we can conclude this with a good founder-led video on why we chose Jamnagar, and to continue the excitement, we will fill it with good graphical posts.",
@@ -791,7 +787,7 @@ const CHATS_DATA = [
                              {
                                  "caption":  "PODI - Jamnagar Launch - Jamanagar- Founder Video",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Jamanagar- Founder Video.mp4"
+                                 "src":  "videos/Jamanagar- Founder Video.mp4"
                              },
                              {
                                  "text":  "Now, we have an HNI launch party for the outlet. In the past, we’ve noticed that people act very strangely around unfamiliar people. We need an icebreaker activity for the same… what do you think we should do here?",
@@ -830,12 +826,12 @@ const CHATS_DATA = [
                              {
                                  "caption":  "BOUEE - Coming Soon / Shutters - Bouee Shutter 1",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Bouee Shutter 1.jpeg"
+                                 "src":  "videos/Bouee Shutter 1.jpeg"
                              },
                              {
                                  "caption":  "BOUEE - Coming Soon / Shutters - Bouee Shutter 2",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Bouee Shutter 2.mp4"
+                                 "src":  "videos/Bouee Shutter 2.mp4"
                              }
                          ],
         "id":  "bouee-shutter",
@@ -872,7 +868,7 @@ const CHATS_DATA = [
                              {
                                  "caption":  "BOUEE - Launch Plan - Bouee Pre 1",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Bouee Pre 1.mp4"
+                                 "src":  "videos/Bouee Pre 1.mp4"
                              },
                              {
                                  "caption":  "BOUEE - Launch Plan - Bouee Pre 1",
@@ -911,7 +907,7 @@ const CHATS_DATA = [
                              {
                                  "caption":  "BOUEE - Launch Plan - Bouee Launch 3",
                                  "type":  "VIDEO",
-                                 "src":  "videos/Bouee Launch 3.mp4"
+                                 "src":  "videos/Bouee launch 3.mp4"
                              },
                              {
                                  "text":  "Now the mistake week plan:",
@@ -1081,22 +1077,22 @@ const CHATS_DATA = [
                              {
                                  "caption":  "VEDIC MOTHER - Vedic Mother - Hands That Heal  (1)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Hands That Heal  (1).mp4"
+                                 "src":  "videos/Hands That Heal  (1).mp4"
                              },
                              {
                                  "caption":  "VEDIC MOTHER - Vedic Mother - Hands That Heal  (2)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Hands That Heal  (2).mp4"
+                                 "src":  "videos/Hands That Heal  (2).mp4"
                              },
                              {
                                  "caption":  "VEDIC MOTHER - Vedic Mother - Hands That Heal  (3)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Hands That Heal  (3).mp4"
+                                 "src":  "videos/Hands That Heal  (3).mp4"
                              },
                              {
                                  "caption":  "VEDIC MOTHER - Vedic Mother - Hands That Heal  (4)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Hands That Heal  (4).mp4"
+                                 "src":  "videos/Hands That Heal  (4).mp4"
                              },
                              {
                                  "text":  "Now for Mother\u0027s Day, I need a campaign for Vedic Mother. It should somehow involve all the products, but I don\u0027t want it to be just another Mother\u0027s Day offer or greeting.\n\nThe same day is also Vedic Mother\u0027s anniversary, so I\u0027d like the campaign to somehow connect the two occasions.",
@@ -1139,7 +1135,7 @@ const CHATS_DATA = [
                              {
                                  "caption":  "VEDIC MOTHER - Vedic Mother - DKN Book Video",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/DKN Book Video.mp4"
+                                 "src":  "videos/DKN Book Video.mp4"
                              },
                              {
                                  "size":  "PDF Document",
@@ -1180,7 +1176,7 @@ const CHATS_DATA = [
                              {
                                  "caption":  "SUPER SANDWICH - Super Sandwich Squad - SSC Character video",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/SSC Character video.mp4"
+                                 "src":  "videos/SSC Character video.mp4"
                              },
                              {
                                  "size":  "PDF Document",
@@ -1221,7 +1217,7 @@ const CHATS_DATA = [
                              {
                                  "caption":  "SUPER SANDWICH - Tray Paper \u0026 Hiring - SSC Hiring Film",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/SSC Hiring Film.mp4"
+                                 "src":  "videos/SSC Hiring Film.mp4"
                              }
                          ],
         "id":  "ssc-tray-hiring",
@@ -1264,12 +1260,12 @@ const CHATS_DATA = [
                              {
                                  "caption":  "SUPER SANDWICH - Valentine\u0027s Day - SSC Valentines  (2)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/SSC Valentines  (2).mp4"
+                                 "src":  "videos/SSC Valentines  (2).mp4"
                              },
                              {
                                  "caption":  "SUPER SANDWICH - Valentine\u0027s Day - SSC Valentines  (1)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/SSC Valentines  (1).mp4"
+                                 "src":  "videos/SSC Valentines  (1).mp4"
                              }
                          ],
         "id":  "ssc-valentines",
@@ -1718,17 +1714,17 @@ const CHATS_DATA = [
                              {
                                  "caption":  "SCITRON - #NoCheating - No Cheating - Scitron (3)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/No Cheating - Scitron (3).mp4"
+                                 "src":  "videos/No Cheating - Scitron (3).mp4"
                              },
                              {
                                  "caption":  "SCITRON - #NoCheating - No Cheating - Scitron (2)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/No Cheating - Scitron (2).mp4"
+                                 "src":  "videos/No Cheating - Scitron (2).mp4"
                              },
                              {
                                  "caption":  "SCITRON - #NoCheating - No Cheating - Scitron (1)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/No Cheating - Scitron (1).mp4"
+                                 "src":  "videos/No Cheating - Scitron (1).mp4"
                              }
                          ],
         "id":  "scitron-nocheating",
@@ -1749,17 +1745,17 @@ const CHATS_DATA = [
                              {
                                  "caption":  "GRUNER - Effortlessly Cool - Gruner ad (1)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Gruner ad (1).mp4"
+                                 "src":  "videos/Gruner ad (1).mp4"
                              },
                              {
                                  "caption":  "GRUNER - Effortlessly Cool - Gruner ad (2)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Gruner ad (2).mp4"
+                                 "src":  "videos/Gruner ad (2).mp4"
                              },
                              {
                                  "caption":  "GRUNER - Effortlessly Cool - Gruner Ad (3)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Gruner Ad (3).mp4"
+                                 "src":  "videos/Gruner Ad (3).mp4"
                              },
                              {
                                  "caption":  "GRUNER - Effortlessly Cool - Gruner Effortlessly Cool",
@@ -1868,12 +1864,12 @@ const CHATS_DATA = [
                              {
                                  "caption":  "SAMAARA TEA - Flavour Launch Ads - Samaara Ads (1)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Samaara Ads (1).mp4"
+                                 "src":  "videos/Samaara Ads (1).mp4"
                              },
                              {
                                  "caption":  "SAMAARA TEA - Flavour Launch Ads - Samaara Ads (2)",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Samaara Ads (2).mp4"
+                                 "src":  "videos/Samaara Ads (2).mp4"
                              }
                          ],
         "id":  "samaara-flavours",
@@ -1894,7 +1890,7 @@ const CHATS_DATA = [
                              {
                                  "caption":  "SAMAARA TEA - Mahashivratri - Samaara Shivratri",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Samaara Shivratri.mp4"
+                                 "src":  "videos/Samaara Shivratri.mp4"
                              },
                              {
                                  "text":  "Great, Panchayat season 3 just released; need a good moment marketing concept for the same:",
@@ -1915,7 +1911,7 @@ const CHATS_DATA = [
                              {
                                  "caption":  "SAMAARA TEA - Panchayat Season 3 - Panchayat Moment Marketing",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Panchayat Moment Marketing.mp4"
+                                 "src":  "videos/Panchayat Moment Marketing.mp4"
                              },
                              {
                                  "text":  "How about something emotional for Ganesh Visarjan?",
@@ -1936,7 +1932,7 @@ const CHATS_DATA = [
                              {
                                  "caption":  "SAMAARA TEA - Ganesh Visarjan - Samaara Ganpati",
                                  "type":  "VIDEO",
-                                 "src":  "Videos/Samaara Ganpati.mp4"
+                                 "src":  "videos/Samaara Ganpati.mp4"
                              }
                          ],
         "id":  "samaara-ganpati",
