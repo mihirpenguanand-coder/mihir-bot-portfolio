@@ -176,16 +176,8 @@ const SIDEBAR_STRUCTURE = [
         "id": "client-techowl",
         "chats": [
           {
-            "id": "techowl-way-forward",
-            "title": "Stay Owlert & Way Forward"
-          },
-          {
-            "id": "techowl-cydes",
-            "title": "CYDES Malaysia"
-          },
-          {
-            "id": "techowl-gisec",
-            "title": "GISEC Dubai"
+            "id": "techowl",
+            "title": "TechOwl"
           }
         ]
       }
@@ -290,17 +282,11 @@ const SIDEBAR_STRUCTURE = [
         "chats": [
           {
             "id": "roongta-developers",
-            "title": "ROONGTA DEVELOPERS"
-          }
-        ]
-      },
-      {
-        "name": "RAY GROUP",
-        "id": "client-ray-group",
-        "chats": [
+            "title": "Roongta Developers"
+          },
           {
             "id": "ray-group",
-            "title": "RAY GROUP"
+            "title": "Ray Group"
           }
         ]
       },
@@ -919,9 +905,10 @@ const CHATS_DATA = [
         "type": "CHATGPT"
       },
       {
-        "type": "VIDEO",
-        "src": "videos/Bouee Shutter 1.mp4",
-        "caption": "Bouee Shutter 1"
+        "type": "IMAGE",
+        "src": "images/Bouee Shutter 1.jpeg",
+        "caption": "Bouee Shutter 1",
+        "alt": "Bouee Shutter 1"
       },
       {
         "type": "VIDEO",
@@ -1130,6 +1117,12 @@ const CHATS_DATA = [
       {
         "text": "Here’s a way forward:",
         "type": "CHATGPT"
+      },
+      {
+        "type": "FILE",
+        "src": "files/Vedic Mother 2024 _ Way forward.pdf",
+        "name": "Vedic Mother 2024 _ Way forward.pdf",
+        "size": "PDF Document"
       }
     ],
     "id": "vedic-maati",
@@ -1515,8 +1508,12 @@ const CHATS_DATA = [
   },
   {
     "agency": "BIG FAT MARKETING",
-    "title": "Stay Owlert & Way Forward",
+    "title": "TechOwl",
     "conversation": [
+      {
+        "type": "TOPIC",
+        "title": "Stay Owlert & Way Forward"
+      },
       {
         "text": "TechOwl is in cybersecurity, and honestly, most brands in this category communicate in the same way.",
         "type": "YOU"
@@ -1566,15 +1563,11 @@ const CHATS_DATA = [
         "src": "files/TECHOWL _ WAY FORWARD (1).pdf",
         "name": "TECHOWL _ WAY FORWARD (1).pdf",
         "size": "PDF Document"
-      }
-    ],
-    "id": "techowl-way-forward",
-    "client": "TECHOWL"
-  },
-  {
-    "agency": "BIG FAT MARKETING",
-    "title": "CYDES Malaysia",
-    "conversation": [
+      },
+      {
+        "type": "TOPIC",
+        "title": "CYDES Malaysia"
+      },
       {
         "text": "TechOwl is participating in CYDES, a cybersecurity summit in Malaysia.",
         "type": "YOU"
@@ -1617,40 +1610,30 @@ const CHATS_DATA = [
         "type": "IMAGE",
         "src": "images/Gysec (1).jpeg",
         "caption": "Gysec (1)",
-        "alt": "Portfolio visual"
+        "alt": "TechOwl CYDES Malaysia"
       },
       {
         "type": "IMAGE",
         "src": "images/Gysec (2).jpeg",
         "caption": "Gysec (2)",
-        "alt": "Portfolio visual"
+        "alt": "TechOwl CYDES Malaysia"
       },
       {
         "type": "IMAGE",
         "src": "images/Gysec (3).jpeg",
         "caption": "Gysec (3)",
-        "alt": "Portfolio visual"
-      },
-      {
-        "type": "IMAGE",
-        "src": "images/Gysec (4).jpeg",
-        "caption": "Gysec (5)",
-        "alt": "Portfolio visual"
+        "alt": "TechOwl CYDES Malaysia"
       },
       {
         "type": "IMAGE",
         "src": "images/Gysec (4).jpeg",
         "caption": "Gysec (4)",
-        "alt": "Portfolio visual"
-      }
-    ],
-    "id": "techowl-cydes",
-    "client": "TECHOWL"
-  },
-  {
-    "agency": "BIG FAT MARKETING",
-    "title": "GISEC Dubai",
-    "conversation": [
+        "alt": "TechOwl CYDES Malaysia"
+      },
+      {
+        "type": "TOPIC",
+        "title": "GISEC Dubai"
+      },
       {
         "text": "The campaign worked really well.",
         "type": "YOU"
@@ -1686,7 +1669,7 @@ const CHATS_DATA = [
         "size": "PDF Document"
       }
     ],
-    "id": "techowl-gisec",
+    "id": "techowl",
     "client": "TECHOWL"
   },
   {

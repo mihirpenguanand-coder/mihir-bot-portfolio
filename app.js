@@ -101,14 +101,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Opening Flow:
     // 1. If deep-linked directly to a chat (#chat=...), load that conversation.
-    // 2. Otherwise, show a brief intro moment before settling into the portfolio.
+    // 2. Otherwise, settle on the home landing view and pop up the introduction modal.
     const hashMatch = window.location.hash.match(/chat=([a-zA-Z0-9\-_]+)/);
     if (hashMatch && hashMatch[1]) {
       openChatView(hashMatch[1], false);
-    } else if (!window.location.hash.includes("no-intro")) {
-      setTimeout(() => {
-        openChatView(PORTFOLIO_CONFIG.defaultChatId || "ug-mothers-day", false);
-      }, 1200);
+    } else {
+      openLandingView(false);
+      if (!window.location.hash.includes("no-intro")) {
+        openIntroModal();
+      }
     }
   }
 
@@ -388,7 +389,21 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ==========================================================================
      3. VIEW TRANSITIONS (LANDING <-> CHAT)
      ========================================================================== */
+  function pauseAllVideos() {
+    const allVideos = document.querySelectorAll("video");
+    allVideos.forEach(v => {
+      try {
+        if (!v.paused) {
+          v.pause();
+        }
+      } catch (err) {
+        // ignore
+      }
+    });
+  }
+
   function openChatView(chatId = "ug-mothers-day", updateHash = true) {
+    pauseAllVideos();
     currentView = "chat";
     activeChatId = chatId;
 
@@ -416,6 +431,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function openLandingView(updateHash = true) {
+    pauseAllVideos();
     currentView = "landing";
     if (updateHash && window.location.hash) {
       history.replaceState(null, null, window.location.pathname);
@@ -551,10 +567,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function loadConversation(chatId) {
-    const chat = CHATS_DATA.find(c => c.id === chatId);
+    pauseAllVideos();
+    let targetChatId = chatId;
+    if (chatId && (chatId.startsWith("techowl-") || chatId === "client-techowl")) {
+      targetChatId = "techowl";
+    }
+    const chat = CHATS_DATA.find(c => c.id === targetChatId) || CHATS_DATA.find(c => c.id === chatId);
     if (!chat) return;
 
-    activeChatId = chatId;
+    activeChatId = chat.id;
     navChatTitle.textContent = chat.title;
     updateSidebarActiveState();
 
@@ -576,11 +597,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const galleryRow = document.createElement("div");
       galleryRow.className = "message-row media-gallery-row";
-      const gallery = document.createElement("div");
-      gallery.className = "media-gallery";
+      const grid = document.createElement("div");
+      const count = mediaBuffer.length;
+      const gridClass = count === 1 ? "grid-1" : count === 2 ? "grid-2" : count === 3 ? "grid-3" : count === 4 ? "grid-4" : "grid-many";
+      grid.className = `chat-media-grid ${gridClass}`;
 
-      mediaBuffer.forEach(item => gallery.appendChild(item));
-      galleryRow.appendChild(gallery);
+      mediaBuffer.forEach(item => {
+        const itemType = (item.type || item.sender || "").toUpperCase();
+        const rawSrc = item.src || item.url || "";
+        const normalizedSrc = normalizePath(rawSrc);
+        const isImage = itemType === "IMAGE" || /\.(jpe?g|png|gif|webp|avif|svg)$/i.test(rawSrc);
+
+        const card = document.createElement("div");
+        card.className = "media-grid-item";
+
+        if (isImage) {
+          card.innerHTML = `
+            <div class="media-thumb-container chat-image-card" data-img-src="${normalizedSrc}" data-img-caption="${escapeHtml(item.caption || '')}">
+              <img 
+                src="${normalizedSrc}" 
+                alt="${escapeHtml(item.alt || item.caption || 'Portfolio visual')}" 
+                class="media-thumb-img chat-image-element"
+                loading="lazy"
+                onerror="handleImageFallback(this)"
+              />
+              <div class="image-zoom-overlay">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  <line x1="11" y1="8" x2="11" y2="14"></line>
+                  <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+                <span>Zoom</span>
+              </div>
+            </div>
+            ${item.caption ? `<div class="media-caption-bar">${escapeHtml(item.caption)}</div>` : ''}
+          `;
+        } else {
+          card.innerHTML = `
+            <div class="media-video-container chat-video-card">
+              <video controls playsinline preload="metadata" class="media-video-element chat-video-element">
+                <source src="${normalizedSrc}" type="video/mp4">
+                Your browser does not support video playback.
+              </video>
+            </div>
+            ${item.caption ? `<div class="media-caption-bar">${escapeHtml(item.caption)}</div>` : ''}
+          `;
+        }
+        grid.appendChild(card);
+      });
+
+      galleryRow.appendChild(grid);
       messagesContainer.appendChild(galleryRow);
       mediaBuffer = [];
     };
@@ -647,10 +714,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (isMedia) {
         flushActiveGroup();
-        const mediaRow = buildMediaMessageRow(msg, index);
-        messagesContainer.appendChild(mediaRow);
+        mediaBuffer.push(msg);
         return;
       }
+
+      flushMediaBuffer();
 
       if (msgType === "TOPIC") {
         flushActiveGroup();
@@ -686,7 +754,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     flushActiveGroup();
-
     flushMediaBuffer();
 
     chatScrollArea.scrollTop = 0;
@@ -864,6 +931,19 @@ document.addEventListener("DOMContentLoaded", () => {
     if (landingInputBox) {
       landingInputBox.addEventListener("click", () => landingInput.focus());
     }
+
+    // Attachment Button Interactions ("Please don't get too attached")
+    const landingAttachBtn = document.getElementById("landing-attach-btn");
+    const chatAttachBtn = document.getElementById("chat-attach-btn");
+    const onAttachClick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const btn = e.currentTarget;
+      btn.style.transform = "scale(1.25) rotate(15deg)";
+      setTimeout(() => { btn.style.transform = ""; }, 220);
+    };
+    if (landingAttachBtn) landingAttachBtn.addEventListener("click", onAttachClick);
+    if (chatAttachBtn) chatAttachBtn.addEventListener("click", onAttachClick);
 
     if (landingSendBtn) {
       landingSendBtn.addEventListener("click", () => {
@@ -1119,13 +1199,43 @@ document.addEventListener("DOMContentLoaded", () => {
   function formatParagraphs(text) {
     if (!text) return "";
     const cleanText = String(text).trim().replace(/\r\n/g, "\n");
-    return `<p class="chat-p">${escapeHtml(cleanText).replace(/\n/g, '<br>')}</p>`;
+    const paragraphs = cleanText.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+    if (paragraphs.length <= 1) {
+      return `<p class="chat-p">${escapeHtml(cleanText).replace(/\n/g, '<br>')}</p>`;
+    }
+    return paragraphs.map(p => `<p class="chat-p">${escapeHtml(p).replace(/\n/g, '<br>')}</p>`).join('');
   }
 
   function formatAssistantParagraphs(text) {
     if (!text) return "";
 
     const normalized = String(text).trim().replace(/\r\n/g, "\n");
+
+    // Check if this entire block is the Super Sandwich squad lineup
+    if (normalized.includes("Breadman") && normalized.includes("Butter Boy") && 
+        normalized.includes("Captain Chutney") && (normalized.includes("Bhajji Bhau") || normalized.includes("Bhaji Bhau"))) {
+      return `
+        <div class="superhero-squad-grid">
+          <div class="superhero-item">
+            <span class="superhero-index">01</span>
+            <span class="superhero-name">Breadman</span>
+          </div>
+          <div class="superhero-item">
+            <span class="superhero-index">02</span>
+            <span class="superhero-name">Butter Boy</span>
+          </div>
+          <div class="superhero-item">
+            <span class="superhero-index">03</span>
+            <span class="superhero-name">Captain Chutney</span>
+          </div>
+          <div class="superhero-item">
+            <span class="superhero-index">04</span>
+            <span class="superhero-name">Bhajji Bhau</span>
+          </div>
+        </div>
+      `;
+    }
+
     const segments = normalized.split(/\n+/).map(segment => segment.trim()).filter(Boolean);
 
     return segments
@@ -1138,9 +1248,13 @@ document.addEventListener("DOMContentLoaded", () => {
           return `<div class="campaign-thought-highlight">${escapeHtml(trimmed)}</div>`;
         }
 
-        // Highlight character team names in Super Sandwich
-        if (trimmed === "Breadman" || trimmed === "Butter Boy" || trimmed === "Captain Chutney" || trimmed === "Bhajji Bhau") {
-          return `<div class="campaign-thought-highlight" style="font-size: 1em; margin: 4px 0;">⚡ ${escapeHtml(trimmed)}</div>`;
+        // Highlight single superhero name if encountered individually
+        if (trimmed === "Breadman" || trimmed === "Butter Boy" || trimmed === "Captain Chutney" || trimmed === "Bhajji Bhau" || trimmed === "Bhaji Bhau") {
+          return `
+            <div class="superhero-item" style="max-width: 260px; margin: 8px 0;">
+              <span class="superhero-name">${escapeHtml(trimmed)}</span>
+            </div>
+          `;
         }
 
         // Highlight creative quote lines
@@ -1155,6 +1269,27 @@ document.addEventListener("DOMContentLoaded", () => {
       .join('');
   }
 
+  const PATH_ALIASES = {
+    "videos/bouee shutter 1.mp4": "images/Bouee Shutter 1.jpeg",
+    "videos/bouee shutter 1.jpeg": "images/Bouee Shutter 1.jpeg",
+    "files/podi - jamnagar .pdf": "files/Podi - Jamnagar.pdf",
+    "documents/podi - jamnagar .pdf": "files/Podi - Jamnagar.pdf",
+    "documents/podi - jamnagar.pdf": "files/Podi - Jamnagar.pdf",
+    "files/gisec 2026 _ techowl .pdf": "files/GISEC 2026 _ TechOwl.pdf",
+    "documents/gisec 2026 _ techowl .pdf": "files/GISEC 2026 _ TechOwl.pdf",
+    "documents/gisec 2026 _ techowl.pdf": "files/GISEC 2026 _ TechOwl.pdf",
+    "files/_vedic mother _ women's day pitch.pdf": "files/Vedic Mother _ Women's day pitch.pdf",
+    "documents/_vedic mother _ women's day pitch.pdf": "files/Vedic Mother _ Women's day pitch.pdf",
+    "documents/vedic mother 2024 _ way forward.pdf": "files/Vedic Mother 2024 _ Way forward.pdf",
+    "documents/yappers final logo.pdf": "files/YAPPERS FINAL LOGO.pdf",
+    "documents/techowl _ way forward (1).pdf": "files/TECHOWL _ WAY FORWARD (1).pdf",
+    "documents/cydes (1).pdf": "files/Cydes (1).pdf",
+    "documents/product cards_final-2.pdf": "files/Product Cards_Final-2.pdf",
+    "documents/dkn book.pdf": "files/DKN Book.pdf",
+    "documents/comic book _ the origin of the super squad _ ssc.pdf": "files/Comic Book _ The Origin of the Super Squad _ SSC.pdf",
+    "documents/ug_fudgiest_brownie_makers_pitch.pdf": "files/UG_Fudgiest_Brownie_Makers_Pitch.pdf"
+  };
+
   function normalizePath(path) {
     if (!path) return "";
 
@@ -1164,11 +1299,14 @@ document.addEventListener("DOMContentLoaded", () => {
       return cleanPath;
     }
 
-    cleanPath = cleanPath.replace(/^\.\//, "");
-    cleanPath = cleanPath.replace(/^\/+/, "");
-    cleanPath = cleanPath.split("/").map(segment => encodeURI(segment)).join("/");
+    cleanPath = cleanPath.replace(/^\.\//, "").replace(/^\/+/, "");
+    const lower = cleanPath.toLowerCase();
 
-    return `/${cleanPath}`;
+    if (PATH_ALIASES[lower]) {
+      cleanPath = PATH_ALIASES[lower];
+    }
+
+    return cleanPath.split("/").map(segment => encodeURI(segment)).join("/");
   }
 
   // Fallback handler if JPG not found
