@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const promptCardsContainer = document.getElementById("prompt-cards-container");
 
   // Navigation Controls
-  const newChatBtn = document.getElementById("new-chat-btn");
+  const sidebarBrandBtn = document.getElementById("sidebar-brand-btn");
   const btnToggleHome = document.getElementById("btn-toggle-home");
   const btnOpenIntroModal = document.getElementById("btn-open-intro-modal");
   const sidebarContent = document.getElementById("sidebar-content");
@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const sidebar = document.getElementById("sidebar");
   const sidebarOverlay = document.getElementById("sidebar-overlay");
   const sidebarOpenBtn = document.getElementById("sidebar-open-btn");
-  const sidebarCloseBtn = document.getElementById("sidebar-close-btn");
 
   // Lightbox Modal Elements
   const lightboxModal = document.getElementById("image-lightbox");
@@ -823,6 +822,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function openIntroModal() {
+    const title = document.querySelector(".intro-modal-title");
+    const badge = document.querySelector(".intro-badge");
+    if (title) title.textContent = "MIHIR BOT";
+    if (badge) badge.textContent = "Origin";
+    if (introModalOverlay) {
+      introModalOverlay.classList.add("active");
+      introModalOverlay.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+  }
+
+  function openContactModal() {
+    const title = document.querySelector(".intro-modal-title");
+    const badge = document.querySelector(".intro-badge");
+    const container = document.getElementById("intro-conversation-container");
+    if (title) title.textContent = "MIHIR BOT";
+    if (badge) badge.textContent = "Contact";
+    if (container) {
+      container.innerHTML = `
+        <div class="intro-chat-bubble">
+          <p><strong>Phone</strong><br><a href="tel:9650735159">9650735159</a></p>
+          <p><strong>Email</strong><br><a href="mailto:mihiranand912@gmail.com">mihiranand912@gmail.com</a></p>
+          <p><strong>LinkedIn</strong><br><a href="https://www.linkedin.com/in/mihir-anand-0903ab232?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer">https://www.linkedin.com/in/mihir-anand-0903ab232?utm_source=share_via&utm_content=profile&utm_medium=member_ios</a></p>
+        </div>
+      `;
+    }
     if (introModalOverlay) {
       introModalOverlay.classList.add("active");
       introModalOverlay.setAttribute("aria-hidden", "false");
@@ -988,17 +1013,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 4. Navigation Controls
-    newChatBtn.addEventListener("click", () => {
-      openLandingView();
-      closeMobileSidebar();
-    });
+    if (sidebarBrandBtn) {
+      sidebarBrandBtn.addEventListener("click", () => {
+        openLandingView();
+        closeMobileSidebar();
+        sidebar.classList.remove("sidebar-collapsed");
+      });
+    }
+
+    if (sidebarOpenBtn) {
+      sidebarOpenBtn.addEventListener("click", () => {
+        if (window.innerWidth <= 768) {
+          const isOpen = sidebar.classList.contains("open");
+          if (isOpen) {
+            closeMobileSidebar();
+          } else {
+            openMobileSidebar();
+          }
+        } else {
+          const shouldCollapse = !sidebar.classList.contains("sidebar-collapsed");
+          sidebar.classList.toggle("sidebar-collapsed", shouldCollapse);
+          sidebar.classList.remove("open");
+          if (sidebarOverlay) sidebarOverlay.classList.remove("active");
+        }
+      });
+    }
 
     btnToggleHome.addEventListener("click", () => {
       openLandingView();
     });
 
     if (btnOpenIntroModal) {
-      btnOpenIntroModal.addEventListener("click", openIntroModal);
+      btnOpenIntroModal.addEventListener("click", openContactModal);
     }
 
     if (btnSidebarProfile) {
@@ -1006,9 +1052,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 5. Mobile Sidebar Drawer
-    sidebarOpenBtn.addEventListener("click", openMobileSidebar);
-    sidebarCloseBtn.addEventListener("click", closeMobileSidebar);
-    sidebarOverlay.addEventListener("click", closeMobileSidebar);
+    if (sidebarOverlay) sidebarOverlay.addEventListener("click", closeMobileSidebar);
 
     // 6. Lightbox Controls
     lightboxClose.addEventListener("click", closeLightbox);
@@ -1055,32 +1099,34 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
     }
 
-    if (compact === "CLICK ON THE SIDEBAR TO VIEW MY WORK") {
+    if (compact === "WHAT IS MIHIR BOT") {
       return `
         <div class="assistant-content">
           <div class="message-text">
-            <p class="chat-p response-emphasis-first">I told you to click on the sidebar 😡😡😡</p>
+            <p class="chat-p response-emphasis-first">Mihir Bot is a portfolio disguised as another AI.</p>
+            <p class="chat-p">It’s a collection of my work, ideas, campaigns, scripts, etc... all built to show you how I think, not just what I’ve made.</p>
           </div>
         </div>
       `;
     }
 
-    if (compact === "I COULDNT AFFORD ACTUAL AI INTEGRATION SO DONT EXPECT ANY ANSWERS FROM THE CHATBOT") {
+    if (compact === "WHY DID YOU MAKE A PORTFOLIO LIKE THIS") {
       return `
         <div class="assistant-content">
           <div class="message-text">
-            <p class="chat-p response-emphasis-first">This is not an actual ai, this is just the most creative 😉 way to show off my portfolio</p>
+            <p class="chat-p response-emphasis-first">Everyone kept telling me AI was going to replace writers.</p>
+            <p class="chat-p">So I thought I’d replace the AI instead.</p>
           </div>
         </div>
       `;
     }
 
-    if (compact === "IF YOU STILL WISH TO ASK ANY QUESTIONS GIVE IT A TRY") {
+    if (compact === "CAN YOU WRITE ME A SCRIPT") {
       return `
         <div class="assistant-content">
           <div class="message-text">
-            <p class="chat-p response-emphasis-first">think outside the bot</p>
-            <p class="chat-p call-human-message">Call the original human.</p>
+            <p class="chat-p response-emphasis-first">You’ve reached the free version of Mihir Bot.</p>
+            <p class="chat-p">To unlock the full writer, please contact the human behind it.</p>
           </div>
         </div>
       `;
