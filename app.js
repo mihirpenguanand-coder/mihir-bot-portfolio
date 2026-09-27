@@ -22,8 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Application State
   let activeChatId = PORTFOLIO_CONFIG.defaultChatId || "ug-mothers-day";
   let currentView = "landing"; // "landing" | "chat"
-  const expandedClients = new Set(["client-uncle-goons"]); // Default open folder
-  const expandedFolders = new Set(); // Default open agency folders (e.g. folder-branding)
+  const expandedClients = new Set();
+  const expandedFolders = new Set();
 
   // DOM Elements - Views & Navigation
   const landingView = document.getElementById("landing-view");
@@ -41,6 +41,38 @@ document.addEventListener("DOMContentLoaded", () => {
   const chatInput = document.getElementById("chat-text-input");
   const chatSendBtn = document.getElementById("chat-send-btn");
   const promptCardsContainer = document.getElementById("prompt-cards-container");
+
+  function closeAttachmentPopovers() {
+    document.querySelectorAll(".attachment-popover").forEach(popover => popover.remove());
+  }
+
+  function toggleAttachmentPopover(button) {
+    const area = button.closest(".attachment-area");
+    if (!area) return;
+    const existing = area.querySelector(".attachment-popover");
+    if (existing) {
+      existing.remove();
+      return;
+    }
+    closeAttachmentPopovers();
+    const popover = document.createElement("div");
+    popover.className = "attachment-popover";
+    popover.textContent = "I have an attachment issue. For real.";
+    area.appendChild(popover);
+  }
+
+  document.querySelectorAll(".tool-btn").forEach(button => {
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleAttachmentPopover(button);
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".attachment-area")) {
+      closeAttachmentPopovers();
+    }
+  });
 
   // Navigation Controls
   const sidebarBrandBtn = document.getElementById("sidebar-brand-btn");
@@ -82,9 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (sidebarRole) sidebarRole.textContent = PORTFOLIO_CONFIG.profile.role;
       if (sidebarAvatar) sidebarAvatar.textContent = PORTFOLIO_CONFIG.profile.avatar || "M";
     }
-
-    // Default expanded client for default chat
-    ensureClientExpandedForChat(activeChatId);
 
     // Populate Sidebar Hierarchy
     renderSidebarChats();
@@ -841,10 +870,21 @@ document.addEventListener("DOMContentLoaded", () => {
     if (badge) badge.textContent = "Contact";
     if (container) {
       container.innerHTML = `
-        <div class="intro-chat-bubble">
-          <p><strong>Phone</strong><br><a href="tel:9650735159">9650735159</a></p>
-          <p><strong>Email</strong><br><a href="mailto:mihiranand912@gmail.com">mihiranand912@gmail.com</a></p>
-          <p><strong>LinkedIn</strong><br><a href="https://www.linkedin.com/in/mihir-anand-0903ab232?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer">https://www.linkedin.com/in/mihir-anand-0903ab232?utm_source=share_via&utm_content=profile&utm_medium=member_ios</a></p>
+        <div class="intro-chat-bubble contact-bubble">
+          <div class="contact-list">
+            <div class="contact-item">
+              <span class="contact-label">Phone</span>
+              <a class="contact-link" href="tel:9650735159">9650735159</a>
+            </div>
+            <div class="contact-item">
+              <span class="contact-label">Email</span>
+              <a class="contact-link" href="mailto:mihiranand912@gmail.com">mihiranand912@gmail.com</a>
+            </div>
+            <div class="contact-item">
+              <span class="contact-label">LinkedIn</span>
+              <a class="contact-link" href="https://www.linkedin.com/in/mihir-anand-0903ab232?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            </div>
+          </div>
         </div>
       `;
     }

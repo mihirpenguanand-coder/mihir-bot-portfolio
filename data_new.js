@@ -16,9 +16,9 @@ const PORTFOLIO_CONFIG = {
   },
   "profile": {
     "modelBadge": "Mihir Bot 4o",
-    "name": "Mihir Bot 4o",
+    "name": "Mihir Anand",
     "avatar": "M",
-    "role": "The Destroyer of Words"
+    "role": "Pronouns: Copy/Content"
   },
   "concept": {
     "line1": "AI WAS GOING TO REPLACE WRITERS.",
