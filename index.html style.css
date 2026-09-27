@@ -1,0 +1,6 @@
+warning: in the working copy of 'index.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'style.css', LF will be replaced by CRLF the next time Git touches it
+ app.js     | 80 [32m+++++++++++++++++++++++++++++++++++++++++++++++++[m[31m-------------[m
+ index.html | 43 [32m+++++++++++[m[31m----------------------[m
+ style.css  | 50 [32m++++++++++++++++++++++++++++[m[31m-----------[m
+ 3 files changed, 113 insertions(+), 60 deletions(-)
