@@ -2301,9 +2301,28 @@ body {
     padding: 0 4px;
   }
 
+  .intro-modal-window {
+    width: calc(100vw - 20px);
+    max-width: calc(100vw - 20px);
+    box-sizing: border-box;
+  }
+
   .intro-modal-body {
     flex-direction: column;
     align-items: center;
+    padding: 18px 16px 20px;
+  }
+
+  .intro-chat-bubble {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .intro-chat-bubble p,
+  .intro-chat-bubble a {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
   }
 
   .intro-portrait-container {
