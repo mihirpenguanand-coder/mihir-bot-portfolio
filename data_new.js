@@ -1398,15 +1398,7 @@ const CHATS_DATA = [
         "src": "files/Comic Book _ The Origin of the Super Squad _ SSC.pdf",
         "name": "Comic Book _ The Origin of the Super Squad _ SSC.pdf",
         "size": "PDF Document"
-      }
-    ],
-    "id": "ssc-brand-thought",
-    "client": "SUPER SANDWICH"
-  },
-  {
-    "agency": "BIG FAT MARKETING",
-    "title": "Hiring, But Make It Super",
-    "conversation": [
+      },
       {
         "text": "This is great, but how do we roll this out?",
         "type": "YOU"
@@ -1432,7 +1424,15 @@ const CHATS_DATA = [
         "src": "images/Tray paper-01.jpg",
         "caption": "Tray paper-01",
         "alt": "Portfolio visual"
-      },
+      }
+    ],
+    "id": "ssc-brand-thought",
+    "client": "SUPER SANDWICH"
+  },
+  {
+    "agency": "BIG FAT MARKETING",
+    "title": "Hiring, But Make It Super",
+    "conversation": [
       {
         "text": "Okay, now that we have the universe, we also need to hire people.",
         "type": "YOU"
@@ -1501,6 +1501,12 @@ const CHATS_DATA = [
       {
         "text": "ONE FREE SUPER SANDWICH.",
         "type": "CHATGPT"
+      },
+      {
+        "type": "IMAGE",
+        "src": "images/CONFIDENTIAL LETTER-07.jpg",
+        "caption": "CONFIDENTIAL LETTER-07",
+        "alt": "Portfolio visual"
       }
     ],
     "id": "ssc-challan",
