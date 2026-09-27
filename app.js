@@ -867,7 +867,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const badge = document.querySelector(".intro-badge");
     const container = document.getElementById("intro-conversation-container");
     if (title) title.textContent = "MIHIR BOT";
-    if (badge) badge.textContent = "Contact";
+    if (badge) badge.textContent = "Contact Info";
     if (container) {
       container.innerHTML = `
         <div class="intro-chat-bubble contact-bubble">
@@ -1166,7 +1166,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="assistant-content">
           <div class="message-text">
             <p class="chat-p response-emphasis-first">You’ve reached the free version of Mihir Bot.</p>
-            <p class="chat-p">To unlock the full writer, please contact the human behind it.</p>
+            <p class="chat-p">To enjoy the full benefits, please contact the human behind it.</p>
           </div>
         </div>
       `;
@@ -1175,8 +1175,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return `
       <div class="assistant-content">
         <div class="message-text">
-          <p class="chat-p response-emphasis-first">think outside the bot</p>
-          <p class="chat-p call-human-message">Call the original human.</p>
+          <p class="chat-p response-emphasis-first">THINK OUTSIDE THE BOT</p>
+          <p class="chat-p call-human-message">CONTACT THE ACTUAL BRAINS BEHIND THIS (NOT SAM ALTMAN)</p>
         </div>
       </div>
     `;
